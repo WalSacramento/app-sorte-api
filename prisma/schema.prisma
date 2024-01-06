@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Draw {
+  id           String         @id @default(uuid())
+  name         String
+  award        String
+  winner       String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  LuckyNumbers LuckyNumbers[]
+}
+
+model LuckyNumbers {
+  id        String   @id @default(uuid())
+  number    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  state     State
+  drawId    String
+  Draw      Draw     @relation(fields: [drawId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum State {
+  AVALIABLE
+  UNAVALIABLE
+  RESERVED
+}
