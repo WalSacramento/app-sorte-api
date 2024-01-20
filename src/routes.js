@@ -1,5 +1,6 @@
 import { Router } from "express"
 import UserController from './controller/UserController'
+import DrawController from './controller/DrawController'
 
 const router = Router()
 
@@ -18,5 +19,15 @@ router.route('/user/:id')
 router.route('/users')
   .get(UserController.findAllUsers)
 
+router.route('/draw')
+  .post(DrawController.createDraw)
+
+router.route('/draw/:id')
+  .get(DrawController.findDraw)
+  .put(DrawController.updateDraw)
+  .delete(DrawController.deleteDraw)
+
+router.route("/draws")
+  .get(DrawController.findAllDraws)
 
 export { router }
