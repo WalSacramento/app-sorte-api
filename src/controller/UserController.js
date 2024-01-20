@@ -98,7 +98,7 @@ export default {
 
       await prisma.user.delete({ where: { id } })
 
-      return res.json({ message: "Usuário deletado!" })
+      return res.json({ message: `Usuário ${user.name} deletado` })
 
     } catch (error) {
       return res.json({ error })
