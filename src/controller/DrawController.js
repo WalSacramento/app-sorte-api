@@ -4,21 +4,20 @@ const prisma = new PrismaClient();
 
 export default {
   async createDraw(req, res) {
-
     try {
-      const { name, award, winner } = req.body
+      const { name, award, winner } = req.body;
 
-      let draw = await prisma.draw.create({
+      const draw = await prisma.draw.create({
         data: {
           name,
           award,
           winner
-        }
-      })
+        },
+      });
 
-      return res.json(draw)
+      return res.json({draw});
     } catch (error) {
-      return res.json({ error })
+      return res.json({ error });
     }
   },
 
@@ -69,12 +68,36 @@ export default {
     }
   },
 
+  async updateWinner(req, res) {
+    try {
+      const { id } = req.params
+      const { winner } = req.body
+
+      const draw = await prisma.draw.findUnique({ where: { id } })
+
+      if (!draw) return res.json({ error: "Não foram encontrados sorteios com esse nome!" })
+
+      const updatedDraw = await prisma.draw.update({
+        where: { id },
+        data: {
+          winner
+        }
+      })
+
+      return res.json(updatedDraw)
+
+    } catch (error) {
+      return res.json({ error })
+
+    }
+  },
+
   async deleteDraw(req, res) {
     try {
       const { id } = req.params
       const draw = await prisma.draw.delete({ where: { id } })
 
-      return res.json({ message: `Sorteio ${draw.name} deletado!`})
+      return res.json({ message: `Sorteio ${draw.name} deletado!` })
 
     } catch (error) {
       return res.json({ error })
