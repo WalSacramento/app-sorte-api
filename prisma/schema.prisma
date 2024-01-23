@@ -18,23 +18,26 @@ model User {
 }
 
 model Draw {
-  id           String         @id @default(uuid())
-  name         String
-  award        String
-  winner       String?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  LuckyNumbers LuckyNumbers[]
-}
-
-model LuckyNumbers {
   id        String   @id @default(uuid())
-  number    Int
+  name      String
+  award     String
+  winner    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  state     State
-  drawId    String
-  Draw      Draw     @relation(fields: [drawId], references: [id])
+  Tickets   Ticket[]
+}
+
+model Ticket {
+  id               String   @id @default(uuid())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  drawId           String
+  buyerName        String?
+  buyerPhoneNumber String?
+  State            State    @default(AVALIABLE)
+  luckyNumber1     Int      @default(0)
+  luckyNumber2     Int      @default(0)
+  Draw             Draw     @relation(fields: [drawId], references: [id])
 }
 
 enum Role {
