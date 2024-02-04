@@ -32,6 +32,17 @@ export default {
     }
   },
 
+  async findAvailableDraws(req, res) {
+    try {
+      const draws = await prisma.draw.findMany({ where: { winner: null } })
+      return res.json(draws)
+
+    } catch (error) {
+      return res.json({ error })
+
+    }
+  },
+
   async findDraw(req, res) {
     try {
       const { id } = req.params

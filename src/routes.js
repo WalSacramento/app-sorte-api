@@ -10,6 +10,9 @@ router.get('/', (req, res) => {
   return res.json({ hello: 'world' })
 })
 
+router.route('/login')
+  .post(UserController.login)
+
 router.route('/user')
   .post(UserController.createUser)
 
@@ -33,6 +36,9 @@ router.route('/draw/:id')
 router.route("/draws")
   .get(DrawController.findAllDraws)
 
+router.route("/available-draws")
+  .get(DrawController.findAvailableDraws)
+
 router.route('/ticket')
   .post(TicketController.createTicket)
   .get(TicketController.findAllTickets)
@@ -42,6 +48,18 @@ router.route('/ticket/:id')
   .get(TicketController.generateTickets)
   .put(TicketController.reserveTicket)
   .post(TicketController.sellTicket)
+
+router.route('sell-tickets')
+  .post(TicketController.sellTickets)
+
+router.route('/reserve-tickets')
+  .put(TicketController.reserveTickets)
+
+router.route('/find-reserved-tickets')
+  .post(TicketController.findReservedTickets)
+
+router.route('/available-tickets/:id')
+  .get(TicketController.findAvailableTickets)
 
 router.route('/unreserve-ticket/:id')
   .put(TicketController.unreserveTicket)

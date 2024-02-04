@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { hash } from "bcryptjs";
+import { hash, compare } from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -105,5 +105,28 @@ export default {
 
     }
   },
+
+  async login(req, res) {
+    try {
+      const { email, password } = req.body
+
+      const user = await prisma.user.findUnique({
+        where: { email }
+      })
+
+      if (!user) return res.json({ error: "Não foram encontrados usuários com esse email!" })
+
+      const passwordMatch = await compare(password, user.password)
+
+      if (!passwordMatch) return res.json({ error: "Senha incorreta!" })
+
+      return res.json(user)
+
+    } catch (error) {
+      console.log(error)
+      return res.json({ error })
+
+    }
+  }
 
 }

@@ -23,7 +23,6 @@ export default {
         },
       })
 
-
       return res.json(ticket);
 
     } catch (error) {
@@ -57,6 +56,26 @@ export default {
     } catch (error) {
       return res.json({ error })
 
+    }
+  },
+
+  async findAvailableTickets(req, res) {
+    try {
+      const { page } = req.query;
+
+      const tickets = await prisma.ticket.findMany({
+        where: {
+          State: 'AVALIABLE'
+        },
+        skip: (page - 1) * 20,
+        take: 20
+      });
+
+      return res.json(tickets);
+
+    } catch (error) {
+      console.error(error); // Adicione esta linha
+      return res.json({ error });
     }
   },
 
@@ -96,6 +115,53 @@ export default {
   
       return res.json(updatedTicket)
   
+    } catch (error) {
+      return res.json({ error })
+    }
+  },
+
+  async reserveTickets(req, res) {
+    try {
+      const { tickets } = req.body
+      const reservedTickets = []
+
+      for (const id of tickets) {
+        const ticket = await prisma.ticket.findUnique({ where: { id } })
+
+        if (ticket && ticket.State === 'AVALIABLE') {
+          const updatedTicket = await prisma.ticket.update({
+            where: { id },
+            data: { State: 'RESERVED' }
+          })
+          reservedTickets.push(updatedTicket)
+        }
+      }
+
+      if (reservedTickets.length !== tickets.length) {
+        return res.json({ success: "Alguns bilhetes não puderam ser reservados!", reservedTickets })
+      }
+
+      return res.json({ success: `Reservados ${reservedTickets.length} bilhetes`, reservedTickets })
+
+    } catch (error) {
+      return res.json({ error })
+    }
+  },
+
+  async findReservedTickets(req, res) {
+    try {
+      const { tickets } = req.body
+
+      const reservedTickets = await prisma.ticket.findMany({
+        where: {
+          id: {
+            in: tickets,
+          },
+          State: 'RESERVED',
+        }
+      })
+
+      return res.json(reservedTickets)
     } catch (error) {
       return res.json({ error })
     }
@@ -150,6 +216,38 @@ export default {
       console.error(error); // Adicione esta linha
       return res.json({ error });
 
+    }
+  },
+
+  async sellTickets(req, res) {
+    try {
+      const { tickets, buyerName, buyerPhoneNumber } = req.body
+      const soldTickets = []
+
+      for (const id of tickets) {
+        const ticket = await prisma.ticket.findUnique({ where: { id } })
+
+        if (ticket && ticket.State === 'RESERVED') {
+          const updatedTicket = await prisma.ticket.update({
+            where: { id },
+            data: {
+              State: 'UNAVALIABLE',
+              buyerName,
+              buyerPhoneNumber
+            }
+          })
+          soldTickets.push(updatedTicket)
+        }
+      }
+
+      if (soldTickets.length !== tickets.length) {
+        return res.json({ success: "Alguns bilhetes não puderam ser vendidos!", soldTickets })
+      }
+
+      return res.json({ success: `Vendidos ${soldTickets.length} bilhetes`, soldTickets })
+
+    } catch (error) {
+      return res.json({ error })
     }
   }
 }
