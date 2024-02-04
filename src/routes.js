@@ -49,7 +49,7 @@ router.route('/ticket/:id')
   .put(TicketController.reserveTicket)
   .post(TicketController.sellTicket)
 
-router.route('sell-tickets')
+router.route('/sell-tickets')
   .post(TicketController.sellTickets)
 
 router.route('/reserve-tickets')
