@@ -79,6 +79,24 @@ export default {
     }
   },
 
+  async findTicketForCellphone(req, res) {
+    try {
+      const { cellphone } = req.params;
+
+      const tickets = await prisma.ticket.findMany({
+        where: {
+          buyerPhoneNumber: cellphone
+        }
+      });
+
+      return res.json(tickets);
+
+    } catch (error) {
+      console.error(error); // Adicione esta linha
+      return res.json({ error });
+    }
+  },
+
   async deleteTicket(req, res) {
     try {
       const { id } = req.params
