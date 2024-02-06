@@ -65,7 +65,7 @@ export default {
 
       const tickets = await prisma.ticket.findMany({
         where: {
-          State: 'AVALIABLE'
+          State: 'AVAILABLE'
         },
         skip: (page - 1) * 20,
         take: 20
@@ -115,24 +115,24 @@ export default {
   async reserveTicket(req, res) {
     try {
       const { id } = req.params
-  
+
       const ticket = await prisma.ticket.findUnique({
         where: { id },
       })
-  
+
       if (!ticket) return res.json({ error: "Não foram encontrados tickets com esse id!" })
-  
-      if (ticket.State !== 'AVALIABLE') return res.json({ error: "Este ticket não está disponível para reserva!" })
-  
+
+      if (ticket.State !== 'AVAILABLE') return res.json({ error: "Este ticket não está disponível para reserva!" })
+
       const updatedTicket = await prisma.ticket.update({
         where: { id },
         data: {
           State: 'RESERVED'
         }
       })
-  
+
       return res.json(updatedTicket)
-  
+
     } catch (error) {
       return res.json({ error })
     }
@@ -146,7 +146,7 @@ export default {
       for (const id of tickets) {
         const ticket = await prisma.ticket.findUnique({ where: { id } })
 
-        if (ticket && ticket.State === 'AVALIABLE') {
+        if (ticket && ticket.State === 'AVAILABLE') {
           const updatedTicket = await prisma.ticket.update({
             where: { id },
             data: { State: 'RESERVED' }
@@ -192,15 +192,15 @@ export default {
       const ticket = await prisma.ticket.findUnique({
         where: { id },
       })
-  
+
       if (!ticket) return res.json({ error: "Não foram encontrados tickets com esse id!" })
-  
-      if (ticket.State !== 'UNAVALIABLE') return res.json({ error: "Este ticket não está reservado!" })
-      
+
+      if (ticket.State !== 'UNAVAILABLE') return res.json({ error: "Este ticket não está reservado!" })
+
       const updatedTicket = await prisma.ticket.update({
         where: { id },
         data: {
-          State: 'AVALIABLE'
+          State: 'AVAILABLE'
         }
       })
 
@@ -220,7 +220,7 @@ export default {
       const ticket = await prisma.ticket.update({
         where: { id },
         data: {
-          State: 'UNAVALIABLE',
+          State: 'UNAVAILABLE',
           buyerName,
           buyerPhoneNumber
         }
@@ -249,7 +249,7 @@ export default {
           const updatedTicket = await prisma.ticket.update({
             where: { id },
             data: {
-              State: 'UNAVALIABLE',
+              State: 'UNAVAILABLE',
               buyerName,
               buyerPhoneNumber
             }

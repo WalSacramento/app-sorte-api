@@ -11,7 +11,7 @@ export function shuffleArray(array) {
 
 export async function generateLuckyNumbersForDraw(drawId) {
   // Cria uma lista de todos os números possíveis
-  const allNumbers = Array.from({length: 10000}, (_, i) => i);
+  const allNumbers = Array.from({ length: 10000 }, (_, i) => i);
 
   // Embaralha a lista
   shuffleArray(allNumbers);
@@ -26,7 +26,7 @@ export async function generateLuckyNumbersForDraw(drawId) {
         drawId: drawId,
         luckyNumber1: luckyNumber1,
         luckyNumber2: luckyNumber2,
-        State: 'AVALIABLE',
+        State: 'AVAILABLE',
       },
     });
   }
