@@ -43,6 +43,12 @@ router.route('/ticket')
   .post(TicketController.createTicket)
   .get(TicketController.findAllTickets)
 
+router.route('/tickets/:drawId')
+  .get(TicketController.findAllTicketsForDraw);
+
+router.route('/ticketsAvailable/:drawId')
+  .get(TicketController.findAvailableTicketsForDraw);
+
 router.route('/ticket/:id')
   .delete(TicketController.deleteTicket)
   .get(TicketController.generateTickets)
@@ -58,7 +64,7 @@ router.route('/reserve-tickets')
 router.route('/find-reserved-tickets')
   .post(TicketController.findReservedTickets)
 
-router.route('/available-tickets/:id')
+router.route('/available-tickets')
   .get(TicketController.findAvailableTickets)
 
 router.route('/unreserve-ticket/:id')

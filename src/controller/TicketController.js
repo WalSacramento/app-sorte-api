@@ -9,13 +9,6 @@ export default {
       const { drawId, luckyNumber1Id, luckyNumber2Id } = req.body;
 
       const draw = await prisma.draw.findUnique({ where: { id: drawId } })
-      // const luckyNumber1 = await prisma.luckyNumber.findUnique({ where: { id: luckyNumber1Id } })
-      // const luckyNumber2 = await prisma.luckyNumber.findUnique({ where: { id: luckyNumber2Id } })
-
-      // if (!draw) return res.json({ error: "Não foram encontrados sorteios com esse id!" })
-      // if (!user) return res.json({ error: "Não foram encontrados usuários com esse id!" })
-      // if (!luckyNumber1) return res.json({ error: "Não foram encontrados números da sorte com esse id!" })
-      // if (!luckyNumber2) return res.json({ error: "Não foram encontrados números da sorte com esse id!" })
 
       const ticket = await prisma.ticket.create({
         data: {
@@ -56,6 +49,51 @@ export default {
     } catch (error) {
       return res.json({ error })
 
+    }
+  },
+
+  async findAllTicketsForDraw(req, res) {
+    try {
+      const { drawId } = req.params;
+      const page = Number(req.query.page);
+      const pageSize = Number(req.query.pageSize);
+
+      const tickets = await prisma.ticket.findMany({
+        where: {
+          drawId
+        },
+        take: pageSize,
+        skip: (page - 1) * pageSize
+      });
+
+      return res.json(tickets);
+
+    } catch (error) {
+      console.error(error);
+      return res.json({ error });
+    }
+  },
+
+  async findAvailableTicketsForDraw(req, res) {
+    try {
+      const { drawId } = req.params;
+      const page = Number(req.query.page);
+      const pageSize = Number(req.query.pageSize);
+
+      const tickets = await prisma.ticket.findMany({
+        where: {
+          drawId,
+          State: 'AVAILABLE'
+        },
+        skip: (page - 1) * pageSize,
+        take: pageSize
+      });
+
+      return res.json(tickets);
+
+    } catch (error) {
+      console.error(error); // Adicione esta linha
+      return res.json({ error });
     }
   },
 
@@ -215,14 +253,19 @@ export default {
   async sellTicket(req, res) {
     try {
       const { id } = req.params
-      const { buyerName, buyerPhoneNumber } = req.body
+      const { buyerName, buyerPhoneNumber, sellerId } = req.body
+
+      const seller = await prisma.user.findUnique({ where: { id: sellerId } })
+
+      if (!seller) return res.json({ error: "Não foi encontrado um usuário com esse id!" })
 
       const ticket = await prisma.ticket.update({
         where: { id },
         data: {
           State: 'UNAVAILABLE',
           buyerName,
-          buyerPhoneNumber
+          buyerPhoneNumber,
+          sellerId
         }
       })
 
@@ -239,8 +282,12 @@ export default {
 
   async sellTickets(req, res) {
     try {
-      const { tickets, buyerName, buyerPhoneNumber } = req.body
+      const { tickets, buyerName, buyerPhoneNumber, sellerId } = req.body
       const soldTickets = []
+
+      const seller = await prisma.user.findUnique({ where: { id: sellerId } })
+
+      if (!seller) return res.json({ error: "Não foi encontrado um usuário com esse id!" })
 
       for (const id of tickets) {
         const ticket = await prisma.ticket.findUnique({ where: { id } })
@@ -251,7 +298,8 @@ export default {
             data: {
               State: 'UNAVAILABLE',
               buyerName,
-              buyerPhoneNumber
+              buyerPhoneNumber,
+              sellerId
             }
           })
           soldTickets.push(updatedTicket)

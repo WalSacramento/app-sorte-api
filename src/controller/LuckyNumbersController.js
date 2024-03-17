@@ -17,19 +17,24 @@ export async function generateLuckyNumbersForDraw(drawId) {
   shuffleArray(allNumbers);
 
   // Cria 5000 Tickets
+  const tickets = [];
   for (let i = 0; i < 5000; i++) {
     const luckyNumber1 = allNumbers[i * 2];
     const luckyNumber2 = allNumbers[i * 2 + 1];
 
-    await prisma.ticket.create({
-      data: {
-        drawId: drawId,
-        luckyNumber1: luckyNumber1,
-        luckyNumber2: luckyNumber2,
-        State: 'AVAILABLE',
-      },
-    });
+    tickets.push(
+      prisma.ticket.create({
+        data: {
+          drawId: drawId,
+          luckyNumber1: luckyNumber1,
+          luckyNumber2: luckyNumber2,
+          State: 'AVAILABLE',
+        },
+      })
+    );
   }
+
+  await prisma.$transaction(tickets);
 
   return allNumbers;
 }
