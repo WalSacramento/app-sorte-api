@@ -6,7 +6,7 @@ POST http://localhost:3030/login
 Content-Type: application/json
 
 {
-  "email": "exemplo@exemplo.com",
+  "email": "email@exemplo.com",
   "password": "senhaexemplo"
 }
 
@@ -51,12 +51,12 @@ Content-Type: application/json
 GET http://localhost:3030/draw/1ad623f0-f0c7-493a-8438-aa5bd291c8d5
 
 ### Teste para a rota de atualização de sorteio
-PUT http://localhost:3030/draw/1ad623f0-f0c7-493a-8438-aa5bd291c8d5
+PUT http://localhost:3030/draw/b174bceb-c4ed-4839-949a-f23344d6f405
 Content-Type: application/json
 
 {
-  "name": "Novo Nome do Sorteio",
-  "date": "2023-01-01"
+  "name": "Sorteio mais um teste",
+  "award": "R$ 4000"
 }
 
 ### Teste para a rota de exclusão de sorteio
