@@ -120,6 +120,8 @@ export default {
 
       if (!passwordMatch) return res.json({ error: "Senha incorreta!" })
 
+      delete user.password
+
       return res.json(user)
 
     } catch (error) {
