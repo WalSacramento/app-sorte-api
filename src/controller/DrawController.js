@@ -34,15 +34,21 @@ export default {
 
   async findAvailableDraws(req, res) {
     try {
-      const draws = await prisma.draw.findMany({ where: { winner: null } })
-      return res.json(draws)
+      const page = Number(req.query.page) || 1;
+      const pageSize = Number(req.query.pageSize) || 20;
+
+      const draws = await prisma.draw.findMany({
+        where: { winner: null },
+        skip: (page - 1) * pageSize,
+        take: pageSize
+      });
+
+      return res.json(draws);
 
     } catch (error) {
-      return res.json({ error })
-
+      return res.json({ error });
     }
   },
-
   async findDraw(req, res) {
     try {
       const { id } = req.params
