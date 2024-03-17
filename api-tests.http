@@ -1,0 +1,151 @@
+### Teste para a rota raiz
+GET http://localhost:3030/
+
+### Teste para a rota de login
+POST http://localhost:3030/login
+Content-Type: application/json
+
+{
+  "email": "exemplo@exemplo.com",
+  "password": "senhaexemplo"
+}
+
+### Teste para a rota de criação de usuário
+POST http://localhost:3030/user
+Content-Type: application/json
+
+{
+  "name": "Nome do Usuário",
+  "email": "email@exemplo.com",
+  "password": "senhaexemplo"
+}
+
+### Teste para a rota de busca de usuário
+GET http://localhost:3030/user/9336b640-d07f-42d3-9da2-7283c1664817
+
+### Teste para a rota de atualização de usuário
+PUT http://localhost:3030/user/9336b640-d07f-42d3-9da2-7283c1664817
+Content-Type: application/json
+
+{
+  "name": "Novo Nome",
+  "email": "novoemail@exemplo.com"
+}
+
+### Teste para a rota de exclusão de usuário
+DELETE http://localhost:3030/user/9336b640-d07f-42d3-9da2-7283c1664817
+
+### Teste para a rota de busca de todos os usuários
+GET http://localhost:3030/users
+
+### Teste para a rota de criação de sorteio
+POST http://localhost:3030/draw
+Content-Type: application/json
+
+{
+  "name": "Sorteio mais um teste",
+  "award": "Prêmio Exemplo"
+}
+
+### Teste para a rota de busca de sorteio
+GET http://localhost:3030/draw/1ad623f0-f0c7-493a-8438-aa5bd291c8d5
+
+### Teste para a rota de atualização de sorteio
+PUT http://localhost:3030/draw/1ad623f0-f0c7-493a-8438-aa5bd291c8d5
+Content-Type: application/json
+
+{
+  "name": "Novo Nome do Sorteio",
+  "date": "2023-01-01"
+}
+
+### Teste para a rota de exclusão de sorteio
+DELETE http://localhost:3030/draw/1ad623f0-f0c7-493a-8438-aa5bd291c8d5
+
+### Teste para a rota de atualização do vencedor do sorteio
+POST http://localhost:3030/draw/23707af7-bfc5-4687-a704-44efa5253da0
+Content-Type: application/json
+
+{
+  "winner": "Nome do Vencedor"
+}
+
+### Teste para a rota de busca de todos os sorteios
+GET http://localhost:3030/draws
+
+### Teste para a rota de busca de sorteios disponíveis
+GET http://localhost:3030/available-draws
+
+### Teste para a rota de geração de bilhetes
+GET http://localhost:3030/ticket/df6a408a-a759-4f29-8950-08d9d9c390d4
+
+### Teste para a rota de criação de bilhete
+POST http://localhost:3030/ticket
+Content-Type: application/json
+
+{
+  "drawId": 1,
+  "userId": 1
+}
+
+### Teste para a rota de busca de todos os bilhetes de um sorteio
+GET http://localhost:3030/tickets/b174bceb-c4ed-4839-949a-f23344d6f405?page=2&pageSize=10
+
+### Teste para a rota de exclusão de bilhete
+DELETE http://localhost:3030/ticket/1
+
+### Teste para a rota de reserva de bilhete
+PUT http://localhost:3030/ticket/011adcff-5fe4-487f-9c96-6e81204fe101
+Content-Type: application/json
+
+
+### Teste para a rota de venda de bilhete
+POST http://localhost:3030/ticket/00bb3f2c-1261-4b1c-94e0-076b7dfa91aa
+Content-Type: application/json
+
+{
+  "buyerName": "Nome do Comprador",
+  "buyerPhoneNumber": "123456789",
+  "sellerId": "b38dfb2b-85a4-4097-ae5c-d3fd74b252b3"
+}
+
+### Teste para a rota de venda de bilhetes
+POST http://localhost:3030/sell-tickets
+Content-Type: application/json
+
+{
+  "tickets": [ "0004b068-c4e8-4a58-b34a-714b4e2b85b6", "000d0838-30fe-482b-ab39-36ef5fd56406", "000ef8d2-25ef-4c09-b180-ad0b013136bc"],
+  "buyerName": "Nome do Comprador",
+  "buyerPhoneNumber": "123456789",
+  "sellerId": "b38dfb2b-85a4-4097-ae5c-d3fd74b252b3"
+}
+
+### Teste para a rota de reserva de bilhetes
+PUT http://localhost:3030/reserve-tickets
+Content-Type: application/json
+
+{
+  "tickets": [ "00164bc3-8dc4-4e72-911c-60470958aee2", "0017363b-6dac-4096-a6f1-b7efa73fa71e", "00187a9b-b9c6-4e52-b685-17b61877b284"]
+}
+
+### Teste para a rota de busca de bilhetes reservados
+POST http://localhost:3030/find-reserved-tickets
+Content-Type: application/json
+
+{
+  "tickets": [ "00164bc3-8dc4-4e72-911c-60470958aee2", "0017363b-6dac-4096-a6f1-b7efa73fa71e", "00187a9b-b9c6-4e52-b685-17b61877b284"]
+}
+
+### Teste para a rota de busca de bilhetes disponíveis por sorteio
+GET http://localhost:3030/ticketsAvailable/b174bceb-c4ed-4839-949a-f23344d6f405?page=1&pageSize=10
+
+### Teste para a rota de busca de bilhetes disponíveis
+GET http://localhost:3030/available-tickets?page=1
+
+### Teste para a rota de desreserva de bilhete
+PUT http://localhost:3030/unreserve-ticket/1
+Content-Type: application/json
+
+{
+  "userId": 1
+}
